@@ -31,7 +31,21 @@ public class App
 		 * Spring configuration
 		 */
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+		
+		session.beginTransaction();
 		Employee e = ctx.getBean("employee", Employee.class);
-		System.out.println( "Hello World!" );
+		e.setLastname("Thoumsin");
+		e.setFirstname("Fabien");
+		try{
+			session.persist(e);
+			session.save(e);
+			session.getTransaction().commit();
+			System.out.println( "Employee "+e.getFirstname()+" "+ e.getLastname()+" added!" );
+		}
+		catch(Exception ex){
+			System.out.println("An error occured...");
+		}
+		session.close();
+		
     }
 }
