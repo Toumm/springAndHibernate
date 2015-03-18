@@ -1,5 +1,6 @@
 package com.acn.toum.sah;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -15,6 +16,9 @@ import com.acn.toum.model.Employee;
  *
  */
 public class App {
+    private App() {
+        super();
+    }
 
     public static void main(String[] args) {
         /*
@@ -38,9 +42,12 @@ public class App {
         Employee e = ctx.getBean("employee", Employee.class);
         e.setLastname("Thoumsin");
         e.setFirstname("Fabien");
-        session.persist(e);
-        session.save(e);
-        session.getTransaction().commit();
+        try {
+            session.persist(e);
+            session.save(e);
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+        }
         session.close();
     }
 
