@@ -16,39 +16,43 @@ import com.acn.toum.model.Employee;
  *
  */
 public class App {
-	private App() {
-		super();
-	}
+    private App() {
+        super();
+    }
 
-	public static void main(String[] args) {
-		/*
-		 * Hibernate configuration
-		 */
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties()).build();
-		SessionFactory sessionFactory = configuration
-				.buildSessionFactory(serviceRegistry);
-		Session session = sessionFactory.openSession();
+    public static void main(String[] args) {
+        /*
+         * Hibernate configuration
+         */
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistry);
+        Session session = sessionFactory.openSession();
 
-		/*
-		 * Spring configuration
-		 */
-		ApplicationContext ctx = new ClassPathXmlApplicationContext(
-				"spring.xml");
+        /*
+         * Spring configuration
+         */
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+                "spring.xml");
 
-		session.beginTransaction();
-		Employee e = ctx.getBean("employee", Employee.class);
-		e.setLastname("Thoumsin");
-		e.setFirstname("Fabien");
-        session.persist(e);
-        session.save(e);
-        session.getTransaction().commit();
-		session.close();
-	}
+        session.beginTransaction();
+        Employee e = ctx.getBean("employee", Employee.class);
+        e.setLastname("Thoumsin");
+        e.setFirstname("Fabien");
+        try {
+            session.persist(e);
+            session.save(e);
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+        	e.setFirstname("NONE");
+        }
+        session.close();
+    }
 
-	public static String jean() {
-		return "Salut";
-	}
+    public static String jean() {
+        return "Salut";
+    }
 }
