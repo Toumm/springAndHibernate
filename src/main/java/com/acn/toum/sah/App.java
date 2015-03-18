@@ -47,7 +47,7 @@ public class App {
             session.save(e);
             session.getTransaction().commit();
         } catch (HibernateException ex) {
-        	e.setFirstname("NONE");
+            throw ex;
         }
         session.close();
     }
