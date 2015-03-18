@@ -16,42 +16,42 @@ import com.acn.toum.model.Employee;
  *
  */
 public class App {
-	public static void main(String[] args) {
-		/*
-		 * Hibernate configuration
-		 */
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties()).build();
-		SessionFactory sessionFactory = configuration
-				.buildSessionFactory(serviceRegistry);
-		Session session = sessionFactory.openSession();
+    private App() {
+        super();
+    }
 
-		/*
-		 * Spring configuration
-		 */
-		ApplicationContext ctx = new ClassPathXmlApplicationContext(
-				"spring.xml");
+    public static void main(String[] args) {
+        /*
+         * Hibernate configuration
+         */
+        Configuration configuration = new Configuration();
+        configuration.configure();
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+        SessionFactory sessionFactory = configuration
+                .buildSessionFactory(serviceRegistry);
+        Session session = sessionFactory.openSession();
 
-		session.beginTransaction();
-		Employee e = ctx.getBean("employee", Employee.class);
-		e.setLastname("Thoumsin");
-		e.setFirstname("Fabien");
-		try {
-			session.persist(e);
-			session.save(e);
-			session.getTransaction().commit();
-			// System.out.println( "Employee "+e.getFirstname()+" "+
-			// e.getLastname()+" added!" );
-		} catch (HibernateException ex) {
-			// System.out.println("An error occured...");
-		}
-		session.close();
+        /*
+         * Spring configuration
+         */
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+                "spring.xml");
 
-	}
+        session.beginTransaction();
+        Employee e = ctx.getBean("employee", Employee.class);
+        e.setLastname("Thoumsin");
+        e.setFirstname("Fabien");
+        try {
+            session.persist(e);
+            session.save(e);
+            session.getTransaction().commit();
+        } catch (HibernateException ex) {
+        }
+        session.close();
+    }
 
-	public static String jean() {
-		return "Salut";
-	}
+    public static String jean() {
+        return "Salut";
+    }
 }
