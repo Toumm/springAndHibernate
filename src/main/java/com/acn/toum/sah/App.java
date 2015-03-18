@@ -1,5 +1,6 @@
 package com.acn.toum.sah;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -14,42 +15,43 @@ import com.acn.toum.model.Employee;
  * Hello world!
  *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-    	/*
-    	 * Hibernate configuration
-    	 */
+public class App {
+	public static void main(String[] args) {
+		/*
+		 * Hibernate configuration
+		 */
 		Configuration configuration = new Configuration();
 		configuration.configure();
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-		SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+				.applySettings(configuration.getProperties()).build();
+		SessionFactory sessionFactory = configuration
+				.buildSessionFactory(serviceRegistry);
 		Session session = sessionFactory.openSession();
-		
+
 		/*
 		 * Spring configuration
 		 */
-		ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
-		
+		ApplicationContext ctx = new ClassPathXmlApplicationContext(
+				"spring.xml");
+
 		session.beginTransaction();
 		Employee e = ctx.getBean("employee", Employee.class);
 		e.setLastname("Thoumsin");
 		e.setFirstname("Fabien");
-		try{
+		try {
 			session.persist(e);
 			session.save(e);
 			session.getTransaction().commit();
-			System.out.println( "Employee "+e.getFirstname()+" "+ e.getLastname()+" added!" );
-		}
-		catch(Exception ex){
-			System.out.println("An error occured...");
+			// System.out.println( "Employee "+e.getFirstname()+" "+
+			// e.getLastname()+" added!" );
+		} catch (HibernateException ex) {
+			// System.out.println("An error occured...");
 		}
 		session.close();
-		
-    }
-    
-    public static String jean(){
-    	return "Salut";
-    }
+
+	}
+
+	public static String jean() {
+		return "Salut";
+	}
 }
