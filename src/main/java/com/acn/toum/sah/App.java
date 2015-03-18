@@ -42,12 +42,9 @@ public class App {
         Employee e = ctx.getBean("employee", Employee.class);
         e.setLastname("Thoumsin");
         e.setFirstname("Fabien");
-        try {
-            session.persist(e);
-            session.save(e);
-            session.getTransaction().commit();
-        } catch (HibernateException ex) {
-        }
+        session.persist(e);
+        session.save(e);
+        session.getTransaction().commit();
         session.close();
     }
 
